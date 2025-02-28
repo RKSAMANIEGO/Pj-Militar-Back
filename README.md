@@ -17,6 +17,8 @@ http://localhost/Backend---Militar/public/#nombre-ruta
 
 ejecutar este comando utilizando el server de Php
 
-- [php -S localhost:8000 -t swagger-ui/dist]
+```bash
+    php -S localhost:8000 -t swagger-ui/dist
+```
 
 ---
