@@ -1,6 +1,9 @@
-<?php 
-require_once __DIR__ . '/../../config/Database.php';
-require_once __DIR__ . '/../model/InMemoriam.php';
+<?php
+
+namespace app\controller;
+
+use Config\Database;
+use app\model\InMemoriam;
 
 header("Content-Type: application/json");
 $db = new Database();
@@ -59,11 +62,11 @@ switch ($method) {
                 "success" => true,
                 "message" => "Registro creado exitosamente",
                 "data" => [
-                "nombre_miembro" => $nombre_miembro,
-                "fecha_fallecimiento" => $fecha_fallecimiento,
-                "descripcion" => $descripcion,
-                "imagen" => $imagenRuta,
-                "logros" => $logros
+                    "nombre_miembro" => $nombre_miembro,
+                    "fecha_fallecimiento" => $fecha_fallecimiento,
+                    "descripcion" => $descripcion,
+                    "imagen" => $imagenRuta,
+                    "logros" => $logros
                 ]
             ]);
             exit;

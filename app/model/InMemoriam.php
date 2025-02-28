@@ -1,14 +1,21 @@
 <?php
-require_once __DIR__ . '/../../config/Database.php';
 
-class InMemoriam {
+namespace app\model;
+
+
+use config\Database;
+
+class InMemoriam
+{
     private $conn;
 
-    public function __construct(Database $db) {
+    public function __construct(Database $db)
+    {
         $this->conn = $db->getConexion();
     }
 
-    public function getAll() {
+    public function getAll()
+    {
         $sql = "SELECT im.*, m.nombres, m.fecha_nac, g.ruta_archivo AS imagen,
                        GROUP_CONCAT(l.titulo SEPARATOR ', ') AS logros
                 FROM InMemoriam im
@@ -21,7 +28,8 @@ class InMemoriam {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getById($id) {
+    public function getById($id)
+    {
         $sql = "SELECT im.*, m.nombres, m.fecha_nac, g.ruta_archivo AS imagen,
                        GROUP_CONCAT(l.titulo SEPARATOR ', ') AS logros
                 FROM InMemoriam im
@@ -38,7 +46,8 @@ class InMemoriam {
         return $result->fetch_assoc();
     }
 
-    public function create($nombre_miembro, $fecha_fallecimiento, $descripcion, $imagen, $logros) {
+    public function create($nombre_miembro, $fecha_fallecimiento, $descripcion, $imagen, $logros)
+    {
         if (!is_array($logros)) {
             $logros = json_decode($logros, true) ?: [];
         }
@@ -81,7 +90,8 @@ class InMemoriam {
         return true;
     }
 
-    public function update($id, $nombre_miembro, $fecha_fallecimiento, $descripcion, $imagen) {
+    public function update($id, $nombre_miembro, $fecha_fallecimiento, $descripcion, $imagen)
+    {
         $sql = "UPDATE InMemoriam SET fecha_fallecimiento = ?, descripcion = ? WHERE id_inmemoriam = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssi", $fecha_fallecimiento, $descripcion, $id);
@@ -100,7 +110,8 @@ class InMemoriam {
         return true;
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $sql = "DELETE FROM Galeria WHERE id_miembro = (SELECT id_miembro FROM InMemoriam WHERE id_inmemoriam = ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);

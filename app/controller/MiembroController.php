@@ -1,7 +1,20 @@
 <?php
-require_once(__DIR__ . "/../model/Miembro.php");
-require_once(__DIR__ . "/../model/Contacto.php");
 
+namespace app\controller;
+
+use config\Database;
+use app\model\Miembro;
+use app\model\Contacto;
+use app\utils\Response;
+
+use OpenApi\Attributes as OA;
+use OpenApi\Attributes\JsonContent;
+use OpenApi\Processors\OperationId;
+
+use function PHPSTORM_META\type;
+
+#[OA\Info(title: "Api de la tabla Miembros", version: "1.0.0", description: "Gestion de todos los miembros de la promocion XIV ...")]
+#[OA\Server(url: "http://localhost/Backend---Militar/public", description: "Path Principal")]
 class MiembroController
 {
     private $miembroModel;
@@ -13,6 +26,27 @@ class MiembroController
         $this->contactoModel = new Contacto($db);
     }
 
+    #[OA\Get(
+        path: "/miembros/total/{estado}",
+        operationId: "getCountMiembrosActivos",
+        summary: "Cantidad de todos los miembros activos",
+        parameters: [
+            new OA\Parameter(
+                name: "estado",
+                in: "path",
+                description: "Estado (ACTIVO || FALLECIDO)",
+                required: true,
+                schema: new OA\Schema(type: "string")
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Cantidad de Miembros Activos",
+                content: new OA\JsonContent(type: "integer")
+            )
+        ]
+    )]
     public function totalCountMiembro($estado)
     {
         $result = $this->miembroModel->countMiembro($estado);
@@ -20,6 +54,48 @@ class MiembroController
     }
 
 
+    #[OA\Get(
+        path: "/miembros",
+        operationId: "ListarAllMiembrosActivos",
+        summary: "Obtener la lista de todos los miembros Activos con sus logros e imagenes  de la promocion",
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Lista de miembros activos",
+                content: new OA\JsonContent(
+                    type: "array",
+                    items: new OA\Items(
+                        type: "object",
+                        properties: [
+                            new OA\Property(property: "id_miembro", type: "int"),
+                            new OA\Property(property: "nombres", type: "string"),
+                            new OA\Property(property: "cargo", type: "string"),
+                            new OA\Property(property: "descripcion", type: "string"),
+                            new OA\Property(property: "num_contacto", type: "string"),
+                            new OA\Property(property: "correo", type: "string"),
+                            new OA\Property(property: "lugar", type: "string"),
+                            new OA\Property(property: "logros", type: "string"),
+                            new OA\Property(property: "ruta_imagenes", type: "string"),
+                        ]
+                    )
+                )
+
+            ),
+            new OA\Response(
+                response: 204,
+                description: "No hay miembros activos",
+                content: new OA\JsonContent(
+                    type: "object",
+                    properties: [
+                        new OA\Property(
+                            property: "message",
+                            type: "string"
+                        )
+                    ]
+                )
+            )
+        ]
+    )]
     public function listAll()
     {
         $miembros = $this->miembroModel->getData();
@@ -30,6 +106,51 @@ class MiembroController
         Response::json($miembros);
     }
 
+
+    #[OA\Get(
+        path: "/miembros/{id}",
+        operationId: "GetMiembroById",
+        summary: "Obtener el Miembro con sus logros e imagenes por Id",
+        parameters: [
+            new OA\Parameter(
+                name: "id",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer"),
+                description: "Id del Miembro"
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Miembro encontrado",
+                content: new OA\JsonContent(
+                    type: "object",
+                    properties: [
+                        new OA\Property(
+                            property: "id",
+                            type: "integer"
+                        )
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 404,
+                description: "Miembro no encontrado",
+                content: new OA\JsonContent(
+                    type: "object",
+                    properties: [
+                        new OA\Property(
+                            property: "error",
+                            type: "string"
+                        )
+                    ]
+                )
+            )
+
+        ]
+
+    )]
     public function getById($id)
     {
         $result =  $this->miembroModel->getDataById($id);
@@ -39,16 +160,61 @@ class MiembroController
         Response::json($result);
     }
 
+
+    #[OA\Delete(
+        path: "/miembros/{id}",
+        operationId: "getDeleteById",
+        description: "Eliminar un miembro por su ID",
+        summary: "Eliminar un miembro por su Id",
+        parameters: [
+            new OA\Parameter(
+                name: "id",
+                required: true,
+                in: "path",
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Miembro Eliminado Exitosamente",
+                content: [
+                    new OA\JsonContent(
+                        type: "object",
+                        properties: [
+                            new OA\Property(
+                                property: "message",
+                                type: "string"
+                            )
+                        ]
+                    )
+                ]
+            ),
+            new OA\Response(
+                response: 400,
+                description: "El Id no se Existe",
+                content: [
+                    new OA\JsonContent(
+                        type: "object",
+                        properties: [
+                            new OA\Property(
+                                property: "message",
+                                type: "string"
+                            )
+                        ]
+                    )
+                ]
+            )
+        ]
+    )]
     public function deleteById($id)
     {
         $result = $this->miembroModel->deleteData($id);
-
-        if (!$result) {
-            Response::json(["Error" => "No se pudo eliminar el registro con ID $id"]);
+        if ($result === false) {
+            Response::json(["message" => "El Miembro con ID $id No Existe"]);
         }
-
         if ($result === null) {
-            Response::json(["Message" => "El Miembro con ID $id No Existe"]);
+            Response::json(["message" => "No se Encontraro el Id $id"]);
         }
         Response::json(["message" => "Miembro con ID $id Eliminado Correctamente"]);
     }

@@ -1,7 +1,11 @@
 <?php
-require_once __DIR__ . "/../model/Tesorero.php";
-require_once __DIR__ . "/../model/Contacto.php";
-require_once __DIR__ . "/../utils/Response.php";
+
+namespace app\controller;
+
+use config\Database;
+use app\model\Tesorero;
+use app\model\Contacto;
+use app\utils\Response;
 
 class TesoreroController
 {
@@ -65,12 +69,12 @@ class TesoreroController
     {
         $data = json_decode(file_get_contents("php://input"), true);
 
-        if (!isset($data['nombre_completo'])) {
+        if (!isset($data['nombre_completo'], $data['idContacto'])) {
             Response::json(['error' => 'Faltan datos'], 400);
             return;
         }
 
-        $result = $this->tesoreroModel->update($id, $data['nombre_completo']);
+        $result = $this->tesoreroModel->update($id, $data['idContacto'], $data['nombre_completo']);
 
         if ($result) {
             Response::json(['message' => 'Tesorero actualizado exitosamente']);

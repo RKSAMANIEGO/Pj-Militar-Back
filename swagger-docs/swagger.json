@@ -1,0 +1,206 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Api de la tabla Miembros",
+        "description": "Gestion de todos los miembros de la promocion XIV ...",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost/Backend---Militar/public",
+            "description": "Path Principal"
+        }
+    ],
+    "paths": {
+        "/miembros/total/{estado}": {
+            "get": {
+                "summary": "Cantidad de todos los miembros activos",
+                "operationId": "getCountMiembrosActivos",
+                "parameters": [
+                    {
+                        "name": "estado",
+                        "in": "path",
+                        "description": "Estado (ACTIVO || FALLECIDO)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cantidad de Miembros Activos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/miembros": {
+            "get": {
+                "summary": "Obtener la lista de todos los miembros Activos con sus logros e imagenes  de la promocion",
+                "operationId": "ListarAllMiembrosActivos",
+                "responses": {
+                    "200": {
+                        "description": "Lista de miembros activos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id_miembro": {
+                                                "type": "integer"
+                                            },
+                                            "nombres": {
+                                                "type": "string"
+                                            },
+                                            "cargo": {
+                                                "type": "string"
+                                            },
+                                            "descripcion": {
+                                                "type": "string"
+                                            },
+                                            "num_contacto": {
+                                                "type": "string"
+                                            },
+                                            "correo": {
+                                                "type": "string"
+                                            },
+                                            "lugar": {
+                                                "type": "string"
+                                            },
+                                            "logros": {
+                                                "type": "string"
+                                            },
+                                            "ruta_imagenes": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "No hay miembros activos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/miembros/{id}": {
+            "get": {
+                "summary": "Obtener el Miembro con sus logros e imagenes por Id",
+                "operationId": "GetMiembroById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id del Miembro",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Miembro encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Miembro no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Eliminar un miembro por su Id",
+                "description": "Eliminar un miembro por su ID",
+                "operationId": "getDeleteById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Miembro Eliminado Exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "El Id no se Existe",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

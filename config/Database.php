@@ -1,5 +1,7 @@
 <?php
 
+namespace config;
+
 class Database
 {
     private $host = "localhost:3306";
@@ -10,7 +12,7 @@ class Database
 
     public function __construct()
     {
-        $this->conexion = new mysqli($this->host, $this->username, $this->password, $this->dbname);
+        $this->conexion = new \mysqli($this->host, $this->username, $this->password, $this->dbname);
 
         if ($this->conexion->connect_error) {
             die("Error de conexión: " . $this->conexion->connect_error);

@@ -1,5 +1,11 @@
 <?php
 
+//namespace public;
+
+use app\utils\Response;
+use app\routes\Router;
+use app\routes\route;
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
@@ -45,13 +51,13 @@ require_once '../app/routes/route.php';
 */
 
 // Cargar las rutas definidas
-require_once __DIR__ . '/../app/routes/route.php';
+//require_once __DIR__ . '/../app/routes/route.php';
 
 
 try {
     // Maneja la solicitud entrante según las rutas configuradas
     $router->handleRequest();
-} catch (Exception $e) {
+} catch (\Exception $e) {
     // En caso de error
     Response::json([
         'error' => 'Error del servidor',

@@ -1,29 +1,36 @@
 <?php
 
-class Balance{
+namespace app\model;
+
+use config\Database;
+
+class Balance
+{
     private $db;
 
-    public function __construct(Database $db){
+    public function __construct(Database $db)
+    {
 
-        $this -> db = $db ->getConexion();
-
+        $this->db = $db->getConexion();
     }
 
-    public function getAll(){
+    public function getAll()
+    {
 
         $query = "SELECT * FROM Balance";
-        $result = $this -> db ->query($query);
+        $result = $this->db->query($query);
 
         $balances = [];
 
-        while ($row = $result-> fetch_assoc()) {
-                $balances[] = $row;
+        while ($row = $result->fetch_assoc()) {
+            $balances[] = $row;
         }
 
         return $balances;
     }
 
-    public function getBalanceById($id){
+    public function getBalanceById($id)
+    {
         $query = "SELECT * FROM Balance WHERE id_balance = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("i", $id);
@@ -70,7 +77,4 @@ class Balance{
 
         return $success;
     }
-    
 }
-
-?>

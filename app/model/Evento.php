@@ -1,4 +1,10 @@
 <?php
+
+namespace app\model;
+
+
+use config\Database;
+
 class Evento
 {
     private $db;

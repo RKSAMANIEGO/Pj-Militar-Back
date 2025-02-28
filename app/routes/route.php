@@ -1,22 +1,24 @@
 <?php
-require_once __DIR__ . '/../controller/AportacionController.php';
-require_once __DIR__ . '/../controller/AsociadoController.php';
-require_once __DIR__ . '/../controller/BalanceController.php';
-require_once __DIR__ . '/../controller/UserController.php';
 
-require_once __DIR__ . '/../controller/MiembroController.php';
-require_once __DIR__ . '/../controller/LogroController.php';
-require_once __DIR__ . '/../controller/ContactoController.php';
-require_once __DIR__ . '/../controller/PersonaController.php';
-require_once __DIR__ . '/../controller/EventoPersonaController.php';
-require_once __DIR__ . '/../controller/EventoController.php';
-require_once __DIR__ . '/../controller/EventoMiembroController.php';
-require_once __DIR__ . '/../controller/NoticiaController.php';
-require_once __DIR__ . '/../controller/NoticiaPersonaController.php';
-require_once __DIR__ . '/../controller/MiembrosLogrosController.php';
-require_once __DIR__ . '/../controller/CategoriaController.php';
-require_once __DIR__ . '/../controller/TesoreroController.php';
+namespace app\routes;
 
+use config\Database;
+use app\controller\MiembroController;
+use app\controller\AportacionController;
+use app\controller\AsociadoController;
+use app\controller\BalanceController;
+use app\controller\UserController;
+use app\controller\LogroController;
+use app\controller\ContactoController;
+use app\controller\PersonaController;
+use app\controller\EventoPersonaController;
+use app\controller\EventoController;
+use app\controller\EventoMiembroController;
+use app\controller\NoticiaController;
+use app\controller\NoticiaPersonaController;
+use app\controller\MiembrosLogrosController;
+use app\controller\CategoriaController;
+use app\controller\TesoreroController;
 
 if (!isset($GLOBALS['router'])) {
     die("Error: El enrutador no está inicializado.");
@@ -40,7 +42,10 @@ $noticiaPersonaController = new NoticiaPersonaController($db);
 $miembrosLogrosController = new MiembrosLogrosController($db);
 $userController = new UserController($db);
 $categoriaController  = new CategoriaController($db);
-
+$aportacionController = new AportacionController($db);
+$asociadoController = new AsociadoController($db);
+$balanceController = new BalanceController($db);
+$tesoreroController = new TesoreroController($db);
 // -----------------------
 // Rutas para Authenticacion
 // -----------------------
@@ -125,7 +130,7 @@ $router->addRoute('DELETE', '/miembros/logros/:idLogro/:idMiembro', [$miembrosLo
 // -----------------------
 // Rutas para Aportación
 // -----------------------
-$aportacionController = new AportacionController($db);
+
 $router->addRoute('GET', '/aportaciones', [$aportacionController, 'getAll']);
 $router->addRoute('GET', '/aportaciones/:id', [$aportacionController, 'getById']);
 $router->addRoute('POST', '/aportaciones', [$aportacionController, 'create']);
@@ -135,7 +140,7 @@ $router->addRoute('DELETE', '/aportaciones/:id', [$aportacionController, 'delete
 // -----------------------
 // Rutas para Asociado
 // -----------------------
-$asociadoController = new AsociadoController($db);
+
 $router->addRoute('GET', '/asociados', [$asociadoController, 'getAll']);
 $router->addRoute('GET', '/asociados/:id', [$asociadoController, 'getById']);
 $router->addRoute('POST', '/asociados', [$asociadoController, 'create']);
@@ -146,7 +151,7 @@ $router->addRoute('DELETE', '/asociados/:id', [$asociadoController, 'delete']);
 // Rutas para Balance 
 // -----------------------
 // falta Crear Tabla
-$balanceController = new BalanceController($db);
+
 $router->addRoute('GET', '/balances', [$balanceController, 'getAll']);
 $router->addRoute('GET', '/balances/:id', [$balanceController, 'getById']);
 $router->addRoute('POST', '/balances', [$balanceController, 'create']);
@@ -157,12 +162,12 @@ $router->addRoute('DELETE', '/balances/:id', [$balanceController, 'delete']);
 // -----------------------
 // Rutas para Tesorero
 // -----------------------
-$tesoreroController = new TesoreroController($db);
+
 $router->addRoute('POST', '/tesorero', [$tesoreroController, 'create']);
 $router->addRoute('GET', '/tesorero', [$tesoreroController, 'getAll']);
 // -----------------------
 // Rutas para Categoria
 // -----------------------
 
-$router->addRoute('GET','/categoria', [$categoriaController, 'getAll']);
-$router->addRoute('POST','/categoria', [$categoriaController, 'create']);
+$router->addRoute('GET', '/categoria', [$categoriaController, 'getAll']);
+$router->addRoute('POST', '/categoria', [$categoriaController, 'create']);

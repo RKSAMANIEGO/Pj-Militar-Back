@@ -1,6 +1,12 @@
 <?php
-require_once __DIR__ . "/../model/Balance.php";
-require_once __DIR__ . "/../utils/Response.php";
+
+namespace app\controller;
+
+namespace app\controller;
+
+use config\Database;
+use app\model\Balance;
+use app\utils\Response;
 
 class BalanceController
 {
@@ -97,4 +103,3 @@ class BalanceController
         }
     }
 }
-?>

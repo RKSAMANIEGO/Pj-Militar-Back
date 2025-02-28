@@ -1,22 +1,31 @@
 <?php
-require_once __DIR__ . '/../model/Asociado.php';
 
-class AsociadoController {
+namespace app\controller;
+
+use config\Database;
+use app\model\Asociado;
+
+
+class AsociadoController
+{
     private Asociado $asociadoModel;
 
-    public function __construct(Database $db) {
+    public function __construct(Database $db)
+    {
         $this->asociadoModel = new Asociado($db);
     }
 
     // GET /asociados
-    public function getAll() {
+    public function getAll()
+    {
         $asociados = $this->asociadoModel->getAll();
         header("Content-Type: application/json");
         echo json_encode($asociados);
     }
 
     // GET /asociados/{id}
-    public function getById($id) {
+    public function getById($id)
+    {
         $asociado = $this->asociadoModel->getById($id);
         header("Content-Type: application/json");
         if ($asociado) {
@@ -27,7 +36,8 @@ class AsociadoController {
         }
     }
 
-    public function create() {
+    public function create()
+    {
         $data = json_decode(file_get_contents("php://input"), true);
         if (!isset($data['nombre_completo'], $data['lugar'], $data['fecha_creacion'], $data['fecha_modificacion'])) {
             http_response_code(400);
@@ -51,7 +61,8 @@ class AsociadoController {
     }
 
     // PUT/PATCH /asociados/{id}
-    public function update($id) {
+    public function update($id)
+    {
         $data = json_decode(file_get_contents("php://input"), true);
         if (!isset($data['nombre_completo'], $data['lugar'], $data['fecha_creacion'], $data['fecha_modificacion'])) {
             http_response_code(400);
@@ -74,7 +85,8 @@ class AsociadoController {
         }
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $success = $this->asociadoModel->delete($id);
         header("Content-Type: application/json");
         if ($success) {
@@ -87,7 +99,8 @@ class AsociadoController {
 
     // POST /asociados/associate
     // Para asociar una aportación a un asociado
-    public function associateAportacion() {
+    public function associateAportacion()
+    {
         $data = json_decode(file_get_contents("php://input"), true);
         if (!isset($data['id_asociado'], $data['id_aportacion'])) {
             http_response_code(400);
@@ -104,4 +117,3 @@ class AsociadoController {
         }
     }
 }
-?>

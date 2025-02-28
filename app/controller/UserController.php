@@ -1,5 +1,10 @@
 <?php
-require_once __DIR__ . "/../model/User.php";
+
+namespace app\controller;
+
+use config\Database;
+use app\model\User;
+use app\utils\Response;
 
 class UserController
 {
@@ -7,7 +12,7 @@ class UserController
 
     public function __construct(Database $db)
     {
-        $this->userModel = new UserModel($db);
+        $this->userModel = new User($db);
     }
 
     // Obtener todos los usuarios

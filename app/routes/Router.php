@@ -1,5 +1,9 @@
 <?php
-require_once __DIR__ . '/../utils/Response.php';
+//require_once __DIR__ . '/../utils/Response.php';
+
+namespace app\routes;
+
+use app\utils\Response;
 
 class Router
 {

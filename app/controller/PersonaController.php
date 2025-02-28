@@ -1,5 +1,10 @@
 <?php
-require_once(__DIR__ . "/../model/Persona.php");
+
+namespace app\controller;
+
+use config\Database;
+use app\model\Persona;
+use app\utils\Response;
 
 class PersonaController
 {

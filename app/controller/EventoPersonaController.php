@@ -1,5 +1,11 @@
 <?php
-require_once __DIR__ . '/../model/EventoPersona.php';
+
+namespace app\controller;
+
+use Config\Database;
+use app\model\EventoPersona;
+use app\utils\Response;
+
 class EventoPersonaController
 {
 

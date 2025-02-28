@@ -1,5 +1,11 @@
 <?php
 
+namespace app\controller;
+
+use config\Database;
+use app\model\NoticiaPersona;
+use app\utils\Response;
+
 require_once __DIR__ . '/../model/NoticiaPersona.php';
 class NoticiaPersonaController
 {

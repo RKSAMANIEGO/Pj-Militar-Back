@@ -1,5 +1,10 @@
 <?php
-require_once __DIR__ . '/../model/MiembrosLogros.php';
+
+namespace app\controller;
+
+use config\Database;
+use app\model\MiembrosLogros;
+use app\utils\Response;
 
 class MiembrosLogrosController
 {

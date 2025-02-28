@@ -1,6 +1,10 @@
 <?php
 
-require_once __DIR__ . "/../model/Noticia.php";
+namespace app\controller;
+
+use config\Database;
+use app\model\Noticia;
+use app\utils\Response;
 
 class NoticiaController
 {
