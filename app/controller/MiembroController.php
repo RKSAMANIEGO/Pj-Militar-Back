@@ -4,7 +4,6 @@ namespace app\controller;
 
 use config\Database;
 use app\model\Miembro;
-use app\model\Contacto;
 use app\utils\Response;
 
 use OpenApi\Attributes as OA;
@@ -18,12 +17,10 @@ use function PHPSTORM_META\type;
 class MiembroController
 {
     private $miembroModel;
-    private $contactoModel;
 
     function __construct(Database $db)
     {
         $this->miembroModel = new Miembro($db);
-        $this->contactoModel = new Contacto($db);
     }
 
     #[OA\Get(
@@ -79,7 +76,6 @@ class MiembroController
                         ]
                     )
                 )
-
             ),
             new OA\Response(
                 response: 204,
@@ -220,28 +216,81 @@ class MiembroController
     }
 
 
+    #[OA\Put(
+        path: "/miembros/{id}",
+        operationId: "PutMiembroById",
+        description: "Actualizar los miembros por Id",
+        summary: "Actualizar miembros por su Id",
+        parameters: new OA\Parameter(
+            name: "id",
+            in: "path",
+            required: true,
+            schema: new OA\Schema(type: "integer")
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Se Actualizo el Miembro Exitosamente",
+                content: new OA\JsonContent(
+                    type: "object",
+                    properties: [
+                        new OA\Property(
+                            property: "message",
+                            type: "string"
+                        )
+                    ]
+                )
+
+            ),
+            new OA\Response(
+                response: 400,
+                description: "Se Requiere mas Campos",
+                content: new OA\JsonContent(
+                    type: "object",
+                    properties: [
+                        new OA\Property(
+                            property: "message",
+                            type: "string"
+                        )
+                    ]
+                )
+            )
+        ]
+
+
+
+    )]
+
     public function updateById($id)
     {
         $resultMiembro = $this->miembroModel->getDataMiembroById($id);
-        $idContacto = $resultMiembro["id_contacto"];
 
         $data = json_decode(file_get_contents("php://input"), true);
-
-        if (!isset($data["id_contacto"], $data["nombres"], $data["cargo"], $data["descripcion"])) {
+        if (!isset($data["nombres"], $data["cargo"], $data["descripcion"])) {
             Response::json(["Error" => "Se requiere mas campos"], 400);
         }
 
-        $this->miembroModel->putData($id, $idContacto, $data["nombres"], $data["cargo"], $data["descripcion"]);
-        $resultContacto = $this->contactoModel->update($idContacto, $data["id_contacto"]["numero"], $data["id_contacto"]["correo"], $data["id_contacto"]["lugar"]);
+        $resultMiembro = $this->miembroModel->putData($id, $data["nombres"], $data["cargo"], $data["descripcion"]);
+
+        if ($resultMiembro === null) {
+            Response::json(["Message" => "El Miembro con ID $id No Existe"], 404);
+        }
+        Response::json(["message" => "Miembroooooooooo  con ID $id Se Actualizo Correctamente"]);
+
+        /*$resultContacto = $this->contactoModel->update($idContacto, $data["id_contacto"]["numero"], $data["id_contacto"]["correo"], $data["id_contacto"]["lugar"]);
 
         if (!$resultContacto) {
-            Response::json(["Error" => "No se pudo eliminar el registro con ID $idContacto"]);
+            Response::json(["Error" => "No se pudo Actualziar el registro con ID $idContacto"]);
         }
 
         if ($resultContacto === null) {
             Response::json(["Message" => "El Contacto con ID $id No Existe"]);
         }
-
-        Response::json(["message" => "Miembro con ID $id Se Actualizo Correctamente"]);
+        */
+        /*$idContacto = $resultMiembro["id_contacto"];
+        if (!isset($data["id_contacto"], $data["nombres"], $data["cargo"], $data["descripcion"])) {
+            Response::json(["Error" => "Se requiere mas campos"], 400);
+        }
+        */
     }
 }
